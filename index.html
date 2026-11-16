@@ -1,0 +1,134 @@
+‎<!DOCTYPE html>
+‎<html lang="bn">
+‎<head>
+‎  <meta charset="UTF-8">
+‎  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+‎  <title>Bondhu Check</title>
+‎  <style>
+‎    body {
+‎      font-family: Arial, sans-serif;
+‎      background: #f4f6fb;
+‎      margin: 0;
+‎      padding: 20px;
+‎      display: flex;
+‎      justify-content: center;
+‎    }
+‎    .card {
+‎      background: #ffffff;
+‎      max-width: 480px;
+‎      width: 100%;
+‎      padding: 24px;
+‎      border-radius: 14px;
+‎      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+‎    }
+‎    h1 {
+‎      margin-top: 0;
+‎      color: #1d4ed8;
+‎      text-align: center;
+‎    }
+‎    label {
+‎      display: block;
+‎      margin-top: 14px;
+‎      margin-bottom: 6px;
+‎      font-weight: bold;
+‎      color: #222;
+‎    }
+‎    input[type="text"], select {
+‎      width: 100%;
+‎      padding: 10px 12px;
+‎      border: 1px solid #cbd5e1;
+‎      border-radius: 8px;
+‎      font-size: 15px;
+‎      box-sizing: border-box;
+‎    }
+‎    button {
+‎      width: 100%;
+‎      margin-top: 20px;
+‎      padding: 12px;
+‎      background: #1d4ed8;
+‎      color: #fff;
+‎      border: none;
+‎      border-radius: 8px;
+‎      font-size: 16px;
+‎      font-weight: bold;
+‎      cursor: pointer;
+‎    }
+‎    button:hover {
+‎      background: #1e40af;
+‎    }
+‎    .msg {
+‎      margin-top: 16px;
+‎      text-align: center;
+‎      font-weight: bold;
+‎      color: #0f766e;
+‎    }
+‎  </style>
+‎</head>
+‎<body>
+‎  <div class="card">
+‎    <h1>Bondhu Check</h1>
+‎    <form id="quizForm">
+‎      <label for="playerName">আপনার নাম লিখুন:</label>
+‎      <input type="text" id="playerName" placeholder="যেমন: মেহেদী" required>
+‎
+‎      <label for="friendName">কোন বন্ধুর জন্য খেলছেন?</label>
+‎      <input type="text" id="friendName" placeholder="বন্ধুর নাম লিখুন" required>
+‎
+‎      <label for="q1">১. আমার সবচেয়ে পছন্দের সময় কোনটি?</label>
+‎      <select id="q1" required>
+‎        <option value="">একটি বেছে নিন</option>
+‎        <option value="সকাল">সকাল</option>
+‎        <option value="বিকেল">বিকেল</option>
+‎        <option value="রাত">রাত</option>
+‎      </select>
+‎
+‎      <label for="q2">২. আড্ডায় আমি কেমন?</label>
+‎      <select id="q2" required>
+‎        <option value="">একটি বেছে নিন</option>
+‎        <option value="সবচেয়ে বেশি কথা বলি">সবচেয়ে বেশি কথা বলি</option>
+‎        <option value="শুনে মজা নেই">শুনে মজা নেই</option>
+‎        <option value="হুটহাট প্ল্যান করি">হুটহাট প্ল্যান করি</option>
+‎      </select>
+‎
+‎      <button type="submit">উত্তর পাঠান</button>
+‎    </form>
+‎    <div class="msg" id="statusMsg"></div>
+‎  </div>
+‎
+‎  <script>
+‎    const SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL";
+‎
+‎    document.getElementById("quizForm").addEventListener("submit", async function (e) {
+‎      e.preventDefault();
+‎      const statusMsg = document.getElementById("statusMsg");
+‎      statusMsg.textContent = "পাঠানো হচ্ছে...";
+‎
+‎      const payload = {
+‎        playerName: document.getElementById("playerName").value.trim(),
+‎        friendName: document.getElementById("friendName").value.trim(),
+‎        q1: document.getElementById("q1").value,
+‎        q2: document.getElementById("q2").value
+‎      };
+‎
+‎      if (!SCRIPT_URL || SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL") {
+‎        statusMsg.textContent = "স্ক্রিপ্ট লিংক এখনো বসানো হয়নি, তবে ফর্ম ঠিক আছে।";
+‎        return;
+‎      }
+‎
+‎      try {
+‎        await fetch(SCRIPT_URL, {
+‎          method: "POST",
+‎          mode: "no-cors",
+‎          headers: { "Content-Type": "application/json" },
+‎          body: JSON.stringify(payload)
+‎        });
+‎        statusMsg.textContent = "ধন্যবাদ! আপনার উত্তর জমা হয়েছে।";
+‎        document.getElementById("quizForm").reset();
+‎      } catch (err) {
+‎        statusMsg.textContent = "পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।";
+‎      }
+‎    });
+‎  </script>
+‎</body>
+‎</html>
+‎
